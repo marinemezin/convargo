@@ -149,11 +149,13 @@ console.log(truckers);
 console.log(deliveries);
 console.log(actors);
 
-console.log("STEP 1");
+console.log("STEP 1 & 2");
 for (let i = 0; i < deliveries.length; i++) {
     var price_km = priceKm(deliveries[i].truckerId);
     var price_vol = priceVol(deliveries[i].truckerId);
+    var decrease = calculate_decrease(deliveries[i].volume);
     var shipping_price = deliveries[i].distance * price_km + deliveries[i].volume * price_vol;
+    shipping_price -= shipping_price * decrease;
     console.log("Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
 }
 
@@ -173,4 +175,15 @@ function priceVol(delId) {
     }
 }
 
-//console.log("STEP 2");
+function calculate_decrease(volume) {
+    if (volume > 25) {
+        return 0.5;
+    }
+    if (volume > 10) {
+        return 0.3;
+    }
+    if (volume > 5) {
+        return 0.1;
+    }
+    return 0;
+}
