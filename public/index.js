@@ -158,6 +158,8 @@ for (let i = 0; i < deliveries.length; i++) {
     shipping_price -= shipping_price * decrease;
     deliveries[i].price = shipping_price;
     console.log("Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
+    calculate_commission(i);
+    calculate_deductible(i);
 }
 
 function priceKm(delId) {
@@ -189,14 +191,22 @@ function calculate_decrease(volume) {
     return 0;
 }
 
-console.log("STEP 3");
-for (let i = 0; i < deliveries.length; i++) {
-    let commission = deliveries[i].price * 0.3;
+function calculate_commission(index) {
+    let commission = deliveries[index].price * 0.3;
     let insurance = commission / 2;
-    let treasury = Math.trunc(deliveries[i].distance / 500);
+    let treasury = Math.trunc(deliveries[index].distance / 500);
     let convargo = commission - insurance - treasury;
-    deliveries[i].commission.insurance = insurance;
-    deliveries[i].commission.treasury = treasury;
-    deliveries[i].commission.convargo = convargo;
-    console.log("Convargo's benefits for " + (i+1) + "th delivery : " + convargo);
+    deliveries[index].commission.insurance = insurance;
+    deliveries[index].commission.treasury = treasury;
+    deliveries[index].commission.convargo = convargo;
+}
+
+function calculate_deductible(index) {
+    let additionalCharge = 0;
+    if (deliveries[index].options.deductibleReduction) {
+        additionalCharge = deliveries[index].volume;
+        deliveries[index].price += additionalCharge;
+        deliveries[index].commission.convargo += additionalCharge;
+    }
+    console.log("Convargo's benefits for " + (index + 1) + "th delivery : " + deliveries[index].commission.convargo);
 }
