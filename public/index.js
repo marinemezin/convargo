@@ -148,3 +148,29 @@ const actors = [{
 console.log(truckers);
 console.log(deliveries);
 console.log(actors);
+
+console.log("STEP 1");
+for (let i = 0; i < deliveries.length; i++) {
+    var price_km = priceKm(deliveries[i].truckerId);
+    var price_vol = priceVol(deliveries[i].truckerId);
+    var shipping_price = deliveries[i].distance * price_km + deliveries[i].volume * price_vol;
+    console.log("Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
+}
+
+function priceKm(delId) {
+    for (let j = 0; j < truckers.length; j++) {
+        if (truckers[j].id == delId) {
+            return truckers[j].pricePerKm;
+        }
+    }
+}
+
+function priceVol(delId) {
+    for (let j = 0; j < truckers.length; j++) {
+        if (truckers[j].id == delId) {
+            return truckers[j].pricePerVolume;
+        }
+    }
+}
+
+//console.log("STEP 2");
