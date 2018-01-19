@@ -149,7 +149,7 @@ console.log(truckers);
 console.log(deliveries);
 console.log(actors);
 
-console.log("STEP 1 & 2");
+
 for (let i = 0; i < deliveries.length; i++) {
     var price_km = priceKm(deliveries[i].truckerId);
     var price_vol = priceVol(deliveries[i].truckerId);
@@ -157,9 +157,11 @@ for (let i = 0; i < deliveries.length; i++) {
     var shipping_price = deliveries[i].distance * price_km + deliveries[i].volume * price_vol;
     shipping_price -= shipping_price * decrease;
     deliveries[i].price = shipping_price;
-    console.log("Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
+    console.log("Before option : Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
     calculate_commission(i);
     calculate_deductible(i);
+    console.log("After option : Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
+    addPriceInArray();
 }
 
 function priceKm(delId) {
@@ -194,7 +196,7 @@ function calculate_decrease(volume) {
 function calculate_commission(index) {
     let commission = deliveries[index].price * 0.3;
     let insurance = commission / 2;
-    let treasury = Math.trunc(deliveries[index].distance / 500);
+    let treasury = 1 + Math.trunc(deliveries[index].distance / 500);
     let convargo = commission - insurance - treasury;
     deliveries[index].commission.insurance = insurance;
     deliveries[index].commission.treasury = treasury;
@@ -208,5 +210,82 @@ function calculate_deductible(index) {
         deliveries[index].price += additionalCharge;
         deliveries[index].commission.convargo += additionalCharge;
     }
-    console.log("Convargo's benefits for " + (index + 1) + "th delivery : " + deliveries[index].commission.convargo);
+}
+
+function addPriceInArray() {
+    for (let i = 0; i < actors.length; i++) {
+        for (let j = 0; actors[i].payment.length; j++) {
+            console.log(actors[i].payment[0].who.length);
+            /*if (actors[i].payment[j].who == 'shipper') {
+                //shipper
+                actors[i].payment[j].amount = findShipperPrice(actors[i].deliveryId);
+                console.log("S : " + actors[i].payment[j].amount);
+            }
+            if (actors[i].payment[j].who == 'trucker') {
+                //trucker
+                actors[i].payment[j].amount = findTruckerPrice(actors[i].deliveryId);
+                console.log("T : " + actors[i].payment[j].amount);
+            }
+            if (actors[i].payment[j].who == 'insurance') {
+                //insurance
+                actors[i].payment[j].amount = findInsurancePrice(actors[i].deliveryId);
+                console.log("I : " + actors[i].payment[j].amount);
+            }
+            if (actors[i].payment[j].who == 'treasury') {
+                //treasury
+                actors[i].payment[j].amount = findTreasuryPrice(actors[i].deliveryId);
+                console.log("Trea : " + actors[i].payment[j].amount);
+            }
+            if (actors[i].payment[j].who == 'treasury') {
+                //convargo
+                actors[i].payment[j].amount = findConvargoPrice(actors[i].deliveryId);
+                console.log("C : " + actors[i].payment[j].amount);
+            }*/
+        }
+    }
+}
+
+function findShipperPrice(delId) {
+    for (let i = 0; deliveries.length; i++) {
+        if (delId == deliveries[i].id) {
+            return deliveries[i].price;
+        }
+    }
+    return null;
+}
+
+function findTruckerPrice(delId) {
+    for (let i = 0; deliveries.length; i++) {
+        if (delId == deliveries[i].id) {
+            return shipping_price * 0.7;
+        }
+    }
+    return null;
+}
+
+function findInsurancePrice(delId) {
+    for (let i = 0; deliveries.length; i++) {
+        if (delId == deliveries[i].id) {
+            return deliveries[i].commission.insurance;
+        }
+    }
+    return null;
+}
+
+function findTreasuryPrice(delId) {
+    for (let i = 0; deliveries.length; i++) {
+        if (delId == deliveries[i].id) {
+            return deliveries[i].commission.treasury;
+        }
+    }
+    return null;
+}
+
+function findConvargoPrice(delId) {
+    for (let i = 0; deliveries.length; i++) {
+        if (delId == deliveries[i].id) {
+            return deliveries[i].commission.convargo;
+        }
+    }
+    return null;
 }
