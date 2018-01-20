@@ -236,7 +236,7 @@ function addPriceInArray(delId) {
                     actors[i].payment[j].amount = findTreasuryPrice(actors[i].deliveryId);
                     console.log("Treasury : " + actors[i].payment[j].amount);
                 }
-                if (actors[i].payment[j].who == 'treasury') {
+                if (actors[i].payment[j].who == 'convargo') {
                     //convargo
                     actors[i].payment[j].amount = findConvargoPrice(actors[i].deliveryId);
                     console.log("Convargo : " + actors[i].payment[j].amount);
