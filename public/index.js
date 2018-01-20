@@ -160,8 +160,8 @@ for (let i = 0; i < deliveries.length; i++) {
     console.log("Before option : Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
     calculate_commission(i);
     calculate_deductible(i);
-    console.log("After option : Shipping price for " + (i + 1) + "th delivery : " + shipping_price);
-    addPriceInArray();
+    console.log("After option : Shipping price for " + (i + 1) + "th delivery : " + deliveries[i].price);
+    addPriceInArray(deliveries[i].id);
 }
 
 function priceKm(delId) {
@@ -212,35 +212,36 @@ function calculate_deductible(index) {
     }
 }
 
-function addPriceInArray() {
+function addPriceInArray(delId) {
     for (let i = 0; i < actors.length; i++) {
-        for (let j = 0; actors[i].payment.length; j++) {
-            console.log(actors[i].payment[0].who.length);
-            /*if (actors[i].payment[j].who == 'shipper') {
-                //shipper
-                actors[i].payment[j].amount = findShipperPrice(actors[i].deliveryId);
-                console.log("S : " + actors[i].payment[j].amount);
+        if (actors[i].deliveryId == delId) {
+            for (let j = 0; j < actors[i].payment.length; j++) {
+                if (actors[i].payment[j].who == 'shipper') {
+                    //shipper
+                    actors[i].payment[j].amount = findShipperPrice(actors[i].deliveryId);
+                    console.log("Shipper : " + actors[i].payment[j].amount);
+                }
+                if (actors[i].payment[j].who == 'trucker') {
+                    //trucker
+                    actors[i].payment[j].amount = findTruckerPrice(actors[i].deliveryId);
+                    console.log("Trucker : " + actors[i].payment[j].amount);
+                }
+                if (actors[i].payment[j].who == 'insurance') {
+                    //insurance
+                    actors[i].payment[j].amount = findInsurancePrice(actors[i].deliveryId);
+                    console.log("Insurance : " + actors[i].payment[j].amount);
+                }
+                if (actors[i].payment[j].who == 'treasury') {
+                    //treasury
+                    actors[i].payment[j].amount = findTreasuryPrice(actors[i].deliveryId);
+                    console.log("Treasury : " + actors[i].payment[j].amount);
+                }
+                if (actors[i].payment[j].who == 'treasury') {
+                    //convargo
+                    actors[i].payment[j].amount = findConvargoPrice(actors[i].deliveryId);
+                    console.log("Convargo : " + actors[i].payment[j].amount);
+                }
             }
-            if (actors[i].payment[j].who == 'trucker') {
-                //trucker
-                actors[i].payment[j].amount = findTruckerPrice(actors[i].deliveryId);
-                console.log("T : " + actors[i].payment[j].amount);
-            }
-            if (actors[i].payment[j].who == 'insurance') {
-                //insurance
-                actors[i].payment[j].amount = findInsurancePrice(actors[i].deliveryId);
-                console.log("I : " + actors[i].payment[j].amount);
-            }
-            if (actors[i].payment[j].who == 'treasury') {
-                //treasury
-                actors[i].payment[j].amount = findTreasuryPrice(actors[i].deliveryId);
-                console.log("Trea : " + actors[i].payment[j].amount);
-            }
-            if (actors[i].payment[j].who == 'treasury') {
-                //convargo
-                actors[i].payment[j].amount = findConvargoPrice(actors[i].deliveryId);
-                console.log("C : " + actors[i].payment[j].amount);
-            }*/
         }
     }
 }
